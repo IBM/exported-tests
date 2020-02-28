@@ -1,5 +1,4 @@
 require('@babel/register')();
-// require('jsdom-global')();
-// require('regenerator-runtime/runtime');
+require('jsdom-global')();
 
 process.env.logWarnings = true;

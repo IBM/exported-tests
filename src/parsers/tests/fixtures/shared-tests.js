@@ -4,6 +4,7 @@
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import { expect } from 'chai';
 
 /**
  * Assertions for static functions that are shared across all TestParser classes
@@ -29,4 +30,9 @@ const parserFunctions = parser => {
   expect(parser.createInheritedSuite).to.be.a('function');
   expect(parser.createTest).to.be.a('function');
   expect(parser.parser).to.be.a('function');
+};
+
+export {
+  parserFunctions,
+  parserStaticFunctions,
 };

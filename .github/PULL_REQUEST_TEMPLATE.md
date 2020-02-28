@@ -37,4 +37,6 @@ Resolves #GITHUB_ISSUE_NUMBER
 - The code has been reviewed by the Maintainer
 - The code has passed quality checks
   - 85% code coverage
+  - Passed the following tests:
+    - Unit
 - Documents are updated

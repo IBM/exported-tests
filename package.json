@@ -14,16 +14,27 @@
   "main": "index.js",
   "source": true,
   "scripts": {
-    "test": "true"
+    "test": "mocha"
   },
   "dependencies": {},
   "devDependencies": {
-    "chai": "4.2.0",
-    "lodash": "4.17.15",
-    "jsdom": "15.2.1",
-    "mocha": "6.2.2",
-    "canvas": "^2.5.0",
+    "@babel/core": "7.7.4",
+    "@babel/register": "7.7.4",
+    "@babel/preset-env": "7.7.4",
+    "@babel/plugin-proposal-function-bind": "7.7.4",
+    "@babel/plugin-syntax-object-rest-spread": "7.7.4",
+    "@babel/plugin-proposal-class-properties": "7.7.4",
     "bufferutil": "^4.0.1",
+    "canvas": "^2.5.0",
+    "chai": "4.2.0",
+    "jsdom": "15.2.1",
+    "jsdom-global": "3.0.2",
+    "lodash": "4.17.15",
+    "mocha": "6.2.2",
     "utf-8-validate": "^5.0.2"
+  },
+  "mocha": {
+    "spec": "src/**/tests/*.js",
+    "require": "test-helpers/setup-test-env.js"
   }
 }

@@ -5,4 +5,6 @@ notifications:
 
 install: npm ci
 
-script: npm test
+script: 
+  - npm test
+  - npm lint

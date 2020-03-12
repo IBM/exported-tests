@@ -10,6 +10,7 @@ globals:
   global: true
   require: true
   process: true
+  beforeAll: true
 
 parserOptions:
   ecmaVersion: 2018

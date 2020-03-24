@@ -8,6 +8,7 @@ globals:
   global: true
   require: true
   process: true
+  before: true
   beforeAll: true
   afterAll: true
 parserOptions:

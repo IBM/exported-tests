@@ -9,7 +9,7 @@
   "license": "Apache-2.0",
   "description": "IBM's Watson Health Design Pattern & Assets Library Exported Tests architecture",
   "engines": {
-    "node": "^10"
+    "node": "10"
   },
   "main": "index.js",
   "source": true,
@@ -25,15 +25,15 @@
     "@babel/plugin-syntax-object-rest-spread": "7.7.4",
     "@babel/preset-env": "7.7.4",
     "@babel/register": "7.7.4",
-    "bufferutil": "^4.0.1",
-    "canvas": "^2.5.0",
+    "bufferutil": "4.0.1",
+    "canvas": "2.5.0",
     "chai": "4.2.0",
-    "eslint": "^6.8.0",
+    "eslint": "6.8.0",
     "jsdom": "15.2.1",
     "jsdom-global": "3.0.2",
     "lodash": "4.17.15",
     "mocha": "6.2.2",
-    "utf-8-validate": "^5.0.2"
+    "utf-8-validate": "5.0.2"
   },
   "mocha": {
     "spec": "src/**/tests/*.js",

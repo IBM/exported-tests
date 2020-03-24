@@ -4,14 +4,12 @@ env:
   mocha: true
 extends: 'eslint:recommended'
 globals:
-  Atomics: readonly
-  SharedArrayBuffer: readonly
   expect: true
   global: true
   require: true
   process: true
   beforeAll: true
-
+  afterAll: true
 parserOptions:
   ecmaVersion: 2018
   sourceType: module

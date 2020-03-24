@@ -9,7 +9,7 @@
   "license": "Apache-2.0",
   "description": "IBM's Watson Health Design Pattern & Assets Library Exported Tests architecture",
   "engines": {
-    "node": "10"
+    "node": "^10"
   },
   "main": "index.js",
   "source": true,

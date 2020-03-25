@@ -14,8 +14,8 @@
  * Through the TestParser, users can create a parser for a given testing framework based on their technology stack.
  */
 
-import TestParser from './parsers/base';
-import BDDTestParser from './parsers/BDD';
+import TestParser from './src/parsers/base';
+import BDDTestParser from './src/parsers/BDD';
 
 /**
  * Test Developer defined function within Exported Tests to determine if a test (or test suite) should be created.

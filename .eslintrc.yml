@@ -1,0 +1,17 @@
+env:
+  browser: true
+  es6: true
+  mocha: true
+extends: 'eslint:recommended'
+globals:
+  expect: true
+  global: true
+  require: true
+  process: true
+  before: true
+  beforeAll: true
+  afterAll: true
+parserOptions:
+  ecmaVersion: 2018
+  sourceType: module
+rules: {}

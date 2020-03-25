@@ -83,3 +83,6 @@ Temporary Items
 ## local watch files
 **/.cache
 .vscode/settings.json
+
+## Distributed files
+dist/*

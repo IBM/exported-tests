@@ -1,6 +1,6 @@
 # Project Overview
 
-A UI testing architecture for writing tests that is UI framework agnostic so the tests can be written once but used in any UI framework application. The tool contains the parser(s) that convert tests written in a unique format to testing framework specific structure/functions used by the application (e.g. Mocha, Jest, etc). This architecture was created by the Watson Health Design Pattern & Asset Library team.
+A UI testing architecture for writing tests that is UI framework agnostic so the tests can be written once but used in any UI framework application. The tool contains the parser(s) that convert tests written in a unique format to testing framework-specific structure/functions used by the application (e.g. Mocha, Jest, etc). This architecture was created by the Watson Health Design Pattern & Asset Library team.
 
 ## Getting started
 
@@ -18,6 +18,19 @@ Now that you you have Exported Tests set up locally, navigate to the project usi
 
 ```bash
 npm ci
+```
+
+### Deployment
+
+We distribute Exported Tests as ES6 and ES5 modules for backward-compatibility support of various testing frameworks. Import the desired module type from the following locations:
+
+* ES6 - `index.js`
+* ES5 - `dist/index.js`
+
+To run the transpiler and generate the ES5 modules use this command:
+
+```bash
+npm run build
 ```
 
 ## Contribution Guide

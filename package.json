@@ -15,7 +15,7 @@
   "source": true,
   "scripts": {
     "test": "mocha",
-    "build": "NODE_ENV=production parcel build index.js --no-minify --target browser",
+    "build": "NODE_ENV=production parcel build index.js --out-dir . --out-file es5 --no-minify --target browser",
     "lint": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {},

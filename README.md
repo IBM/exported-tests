@@ -25,7 +25,7 @@ npm ci
 We distribute Exported Tests as ES6 and ES5 modules for backward-compatibility support of various testing frameworks. Import the desired module type from the following locations:
 
 * ES6 - `index.js`
-* ES5 - `dist/index.js`
+* ES5 - `es5.js`
 
 To run the transpiler and generate the ES5 modules use this command:
 

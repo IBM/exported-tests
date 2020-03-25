@@ -85,4 +85,5 @@ Temporary Items
 .vscode/settings.json
 
 ## Distributed files
-dist/*
+es5.js
+es5.js.map

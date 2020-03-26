@@ -15,6 +15,7 @@
   "source": true,
   "scripts": {
     "test": "mocha",
+    "build": "NODE_ENV=production parcel build index.js --out-dir . --out-file es5 --no-minify --target browser",
     "lint": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {},
@@ -33,6 +34,7 @@
     "jsdom-global": "3.0.2",
     "lodash": "4.17.15",
     "mocha": "6.2.2",
+    "parcel-bundler": "1.12.4",
     "utf-8-validate": "5.0.2"
   },
   "mocha": {

@@ -10,5 +10,5 @@ Unit Testing refers to a level of the software testing process where individual 
 
 ```bash
 // Sample command to run project unit tests.
-$ npm test
+$ yarn test
 ```

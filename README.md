@@ -17,7 +17,7 @@ We develop using a [forking workflow](https://guides.github.com/activities/forki
 Now that you you have Exported Tests set up locally, navigate to the project using the `cd` command in the terminal and install dependencies using this command:
 
 ```bash
-npm ci
+yarn
 ```
 
 ### Deployment
@@ -30,7 +30,7 @@ We distribute Exported Tests as ES6 and ES5 modules for backward-compatibility s
 To run the transpiler and generate the ES5 modules use this command:
 
 ```bash
-npm run build
+yarn build
 ```
 
 ## Contribution Guide

@@ -3,9 +3,9 @@ language: node_js
 notifications:
   email: false
 
-install: npm ci
+install: yarn
 
 script:
-  - npm run lint
-  - npm test
-  - npm run build
+  - yarn lint
+  - yarn test
+  - yarn build

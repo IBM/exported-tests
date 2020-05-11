@@ -71,8 +71,8 @@ class BDDTestParser extends TestParser {
    *
    * @example
    * // For sample input and output code see Examples 1 - 3:
-   * // input: `./examples/exported-tests.js`
-   * // expected output:`./examples/expected-BDD.js`
+   * // input: `/examples/exported-tests.js`
+   * // expected output:`/examples/expected-BDD.js`
    */
   suiteSetup(test, fragment) {
     if (typeof test.before === 'function') {
@@ -138,7 +138,7 @@ class BDDTestParser extends TestParser {
    * @example
    * // For sample input and output code see Example 7:
    * // input: `./examples/exported-tests.js`
-   * // expected output:`./examples/expected-BDD.js`
+   * // expected output:`/examples/expected-BDD.js`
    */
   createSuite(suite, fragment, index, includeSetupCleanup = true) {
     if (this.doParseTest(suite.checkConditions, fragment, index)) {
@@ -164,8 +164,8 @@ class BDDTestParser extends TestParser {
    *
    * @example
    * // For sample input and output code see Examples 8 - 9:
-   * // input: `./examples/exported-tests.js`
-   * // expected output:`./examples/expected-BDD.js`
+   * // input: `/examples/exported-tests.js`
+   * // expected output:`/examples/expected-BDD.js`
    */
   createFragmentSuite(test, fragment, _, testFunction) {
     describe(test.name, () => {
@@ -189,7 +189,7 @@ class BDDTestParser extends TestParser {
    * @example
    * // For sample input and output code see Example 10:
    * // input: `./examples/exported-tests.js`
-   * // expected output:`./examples/expected-BDD.js`
+   * // expected output:`/examples/expected-BDD.js`
    */
   createInheritedSuite(test, fragment, index) {
     describe(test.name, () => {

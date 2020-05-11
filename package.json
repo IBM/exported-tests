@@ -41,6 +41,6 @@
   },
   "mocha": {
     "spec": "src/**/tests/*.js",
-    "require": "test-helpers/setup-test-env.js"
+    "require": "env/setup-test-env.js"
   }
 }

@@ -42,7 +42,7 @@ It will be easier for your pull request to receive reviews if you consider the c
 * Break large changes into a logical series of smaller patches, which are easy to understand individually and combine to solve a broader issue
 * Label PRs with appropriate pull request labels to indicate status for maintainers
 
-Note: if your pull request isn't getting enough attention, you can use the team channel or contact the maintainer on Slack to find a reviewer
+Note: if your pull request isn't getting enough attention, you can contact the maintainer to find a reviewer
 
 ### Testing
 
@@ -52,7 +52,7 @@ Testing is the responsibility of all contributors.
 
 Issue and pull request labels
 
-This section lists the labels we use to help us track and manage issues and pull requests. These labels are used across all organization repositories.
+This section lists the labels we use to help us track and manage issues and pull requests.
 
 [GitHub search](https://help.github.com/en/articles/searching-issues-and-pull-requests) makes it easy to use labels for finding groups of issues or pull requests you're interested in.
 
@@ -62,9 +62,9 @@ If you have suggestions for new labels, please open an issue on the project sour
 
 | Label name | `View Issues in Repository` :mag_right: | Description |
 | --- | --- | --- | --- |
-| `bug` | [view][search-repo-label-bug] |Confirmed bugs or reports that are very likely to be bugs |
+| `bug` | [view][search-repo-label-bug] | Confirmed bugs or reports that are very likely to be bugs |
 | `enhancement` | [view][search-repo-label-feature] | Feature requests |
-| `help-wanted` | [view][search-repo-label-help-wanted] |The project core team would appreciate help from the community in resolving these issues |
+| `help-wanted` | [view][search-repo-label-help-wanted] | The project core team would appreciate help from the community in resolving these issues |
 | `wontfix` | [view][search-repo-label-wontfix] | The project core team has decided not to fix these issues for now, either because they're working as intended or for some other reason |
 | `invalid` | [view][search-repo-label-invalid] | Invalid Issues (e.g. user errors) |
 

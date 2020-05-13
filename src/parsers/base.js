@@ -124,8 +124,8 @@ class TestParser {
    *
    * @example
    * // For sample input and output code see Examples 4 - 6:
-   * // input: `./examples/exported-tests.js`
-   * // expected BDD output:`./examples/expected-BDD.js`
+   * // input: `/examples/exported-tests.js`
+   * // expected BDD output:`/examples/expected-BDD.js`
    */
   doParseTest(conditions, fragment, index) {
     return (

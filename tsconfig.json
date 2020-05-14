@@ -1,0 +1,11 @@
+{
+  "comments": "will want to scope to src only once we have the rollup PR merged",
+  "compilerOptions": {
+    "outDir": "./build",
+    "allowJs": true,
+    "target": "es2016"
+  },
+  "include": [
+    "./*",
+  ]
+}

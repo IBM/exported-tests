@@ -12,10 +12,10 @@
  * @param  {string[]} classInstance list of functions that should bound to the class constructor instead of
  *            the specific instance
  */
-const bindFunctions = (functionObj, classInstance, bindToConstructor = []) => {
+const bindFunctions = (functionObj: object, classInstance, bindToConstructor: string[] = []) => {
     const SELF = classInstance;
-  
-    Object.keys(functionObj).forEach(name => {
+
+    Object.keys(functionObj).forEach((name: string) => {
       if (bindToConstructor.includes(name)) {
         SELF.constructor[name] = functionObj[name].bind(SELF);
       } else {
@@ -23,6 +23,5 @@ const bindFunctions = (functionObj, classInstance, bindToConstructor = []) => {
       }
     });
   };
-  
+
   export default bindFunctions;
-  

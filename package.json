@@ -18,7 +18,7 @@
   "scripts": {
     "test": "mocha",
     "build": "NODE_ENV=production parcel build index.js --out-dir . --out-file es5 --no-minify --target browser",
-    "lint": "eslint --ignore-path .gitignore ."
+    "lint": "eslint **/*.js"
   },
   "dependencies": {},
   "devDependencies": {

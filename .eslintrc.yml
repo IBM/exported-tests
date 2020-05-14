@@ -14,4 +14,8 @@ globals:
 parserOptions:
   ecmaVersion: 2018
   sourceType: module
+ignorePatterns:
+  - 'index.js'
+  - 'es5.js'
+  - 'es5.js.map'
 rules: {}

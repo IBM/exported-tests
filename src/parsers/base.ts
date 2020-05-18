@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import { DOMWindow } from "jsdom";
+
 /**
  * Exported Tests individual test structure
  * @typicalname Individual test object structure
@@ -59,14 +61,14 @@ export interface TestSuite {
   readonly afterAll?: Function,
   readonly afterEach?: Function,
   readonly getFragmentSet?: Function,
-  readonly fragmentSetMessage?: String
+  readonly fragmentSetMessage?: string
 }
 
 /**
  * Defines the static methods of the TestParser Class
  */
 export interface TestParserConstructor {
-  new (tests: TestSuite, wndwFragment: Window|DocumentFragment|HTMLElement): TestParserInterface,
+  new (tests: TestSuite, wndwFragment: Window|DocumentFragment|HTMLElement|DOMWindow): TestParserInterface,
   isSuite: Function,
   getTestType: Function,
   getFragment: Function,
@@ -76,7 +78,7 @@ export interface TestParserConstructor {
  * Defines the instance properties and methods of the TestParser class
  */
 export interface TestParserInterface {
-  window: Window,
+  window: Window|DOMWindow,
   fragment: DocumentFragment,
   doParseTest: Function,
   getTest: Function,
@@ -155,7 +157,7 @@ class TestParser implements TestParserInterface {
    * @param {test-suite} tests group of test suites to be executed on a particular application or page
    * @param {Window|DocumentFragment|HTMLElement} wndwFragment JavaScript window object or Document Fragment object
    */
-  constructor(tests: TestSuite[], wndwFragment: Window|DocumentFragment|HTMLElement) {
+  constructor(tests: TestSuite[], wndwFragment: Window|DocumentFragment|HTMLElement|DOMWindow) {
     // if wndwFragment is a Window, get fragment from wndwFragment
     if ((wndwFragment as Window).window === wndwFragment && wndwFragment.document) {
       this.window = wndwFragment;

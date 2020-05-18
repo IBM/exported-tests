@@ -64,6 +64,7 @@ class BDDTestParser extends TestParser {
     const wndw = this.window;
     if (typeof test.beforeAll === 'function') {
       // Mocha uses the before function; Jest uses beforeAll
+      // @ts-ignore
       const beforeFunc = typeof beforeAll === 'function' ? beforeAll : before;
       beforeFunc(done => {
         test.beforeAll(done, fragment, wndw);
@@ -88,6 +89,7 @@ class BDDTestParser extends TestParser {
     const wndw = this.window;
     if (typeof test.afterAll === 'function') {
       // Mocha uses the after function; Jest uses afterAll
+      // @ts-ignore
       const afterFunc = typeof afterAll === 'function' ? afterAll : after;
       afterFunc(done => {
         test.afterAll(done, fragment, wndw);

@@ -24,6 +24,7 @@
   ],
   "source": true,
   "scripts": {
+    "ts": "tsc --outDir ./build",
     "test": "mocha",
     "build": "rollup -c",
     "lint": "eslint --ignore-path .gitignore ."
@@ -37,6 +38,7 @@
     "@babel/preset-env": "7.7.4",
     "@babel/register": "7.7.4",
     "@rollup/plugin-babel": "5.0.0",
+    "@rollup/plugin-typescript": "^4.1.1",
     "@types/chai": "^4.2.11",
     "@types/jsdom": "^16.2.3",
     "@types/lodash": "^4.14.151",

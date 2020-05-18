@@ -24,7 +24,7 @@
   ],
   "source": true,
   "scripts": {
-    "test": "mocha -r ts-node/register src/**/tests/*.ts",
+    "test": "mocha",
     "build": "rollup -c",
     "lint": "eslint --ignore-path .gitignore ."
   },
@@ -54,5 +54,9 @@
     "ts-node": "^8.10.1",
     "typescript": "^3.9.2",
     "utf-8-validate": "5.0.2"
+  },
+  "mocha": {
+    "spec": "src/**/tests/*.ts",
+    "require": "env/setup-test-env.js"
   }
 }

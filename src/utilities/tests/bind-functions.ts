@@ -9,10 +9,6 @@ import { expect } from 'chai';
 import bindFunctions from '../bind-functions';
 
 describe('bindFunctions applies the class instance to a function', () => {
-  interface FixtureConstructor {
-    new (): FixtureInterface,
-  }
-
   interface FixtureInterface {
     instanceProperty: string,
     myInstanceMethod: Function,

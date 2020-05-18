@@ -87,3 +87,6 @@ Temporary Items
 ## Distributed files
 es5.js
 es5.js.map
+
+## Build files
+build

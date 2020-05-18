@@ -6,6 +6,7 @@
  */
 
 import { DOMWindow } from "jsdom";
+import bindFunctions from '../utilities/bind-functions';
 
 /**
  * Exported Tests individual test structure
@@ -178,6 +179,7 @@ class TestParser implements TestParserInterface {
       );
     }
 
+    this._bindFunctions();
     this.parser(tests, this.fragment);
   }
 
@@ -197,6 +199,25 @@ class TestParser implements TestParserInterface {
       typeof conditions === 'undefined' ||
       conditions(fragment, this.window, index)
     );
+  }
+
+  /**
+   * Bind public functions so that the reference to `this` is always accurate
+   * @private
+   */
+  _bindFunctions() {
+    // Bind functions
+    const publicFunctions = {
+      createSuite: this.createSuite,
+      createInheritedSuite: this.createInheritedSuite,
+      createFragmentSuite: this.createFragmentSuite,
+      createTest: this.createTest,
+      getTest: this.getTest,
+      doParseTest: this.doParseTest,
+      parser: this.parser,
+    };
+
+    bindFunctions(publicFunctions, this);
   }
 
   /**

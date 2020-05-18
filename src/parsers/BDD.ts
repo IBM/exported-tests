@@ -4,8 +4,8 @@
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
-
 import TestParser, { TestSuite, ExportedTest } from './base';
+import bindFunctions from '../utilities/bind-functions';
 
 /**
  * BDD supported Exported Tests' `beforeAll` function.
@@ -44,6 +44,22 @@ import TestParser, { TestSuite, ExportedTest } from './base';
  * Confirmed to work with Mocha and Jest.
  */
 class BDDTestParser extends TestParser {
+  /**
+   * Overwrite TestParser bindFunctions to include BDD unique functions
+   * @private
+   */
+  _bindFunctions() {
+    super._bindFunctions();
+
+    // Bind functions
+    const publicFunctions = {
+      suiteSetup: this.suiteSetup,
+      suiteCleanup: this.suiteCleanup,
+    };
+
+    bindFunctions(publicFunctions, this);
+  }
+
   /**
    * BDD Describe function setup. This function converts Exported Tests `beforeAll` and `beforeEach` functions
    * in to describe function's `before(All)` and `before` functions using the done function to denote the end

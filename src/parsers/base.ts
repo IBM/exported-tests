@@ -8,18 +8,100 @@
 import bindFunctions from '../utilities/bind-functions';
 
 /**
+ * Exported Tests individual test structure
+ * @typicalname Individual test object structure
+ * @typedef {object} exported-test
+ * @property {string} name Test name (e.g. In Gherkin this would be the `Scenario`, where in BDD this is the `it` function)
+ * @property {function} [checkConditions] See typedef (e.g. In Gherkin this could be statements defined by the `Given` step)
+ *              (Note: ran prior to any test execution)
+ * @property {test-suite[]} [inheritedTests] Set of tests or test suites that are imported from another component
+ * @property {function} [getFragmentSet] See typedef (Note: ran prior to any test execution)
+ * @property {function} [getSubFragment] See typedef (Note: ran prior to any test execution)
+ * @property {function} getActual See typedef
+ * @property {function} runComparison See typedef
+ */
+export interface ExportedTest {
+  readonly name: string,
+  readonly checkConditions?: Function,
+  readonly inheritedTests?: TestSuite[],
+  readonly getFragmentSet?: Function,
+  readonly getSubFragment?: Function,
+  readonly getActual: Function,
+  readonly runComparison: Function,
+}
+
+/**
+ * Exported tests that are grouped together in a single suite based on relationship to a single feature/functionality
+ * @typicalname Test suite object structure
+ * @typedef {object} test-suite
+ * @property {string} name Name for the grouping of tests (e.g. In Gherkin this would be the `Feature`,
+ *              where in BDD this is the `describe` function)
+ * @property {function} [checkConditions] See typedef (e.g. In Gherkin this could be statements defined by a `Background` block)
+ *              (Note: ran prior to any test execution)
+ * @property {function} [beforeAll] See typedef (e.g. In Gherkin this could be statements defined by a `Background` block
+ *              and is the  equivalent to the BDD framework's `before` (Mocha) or `beforeAll` (Jest) function used
+ *              by the `describe` function)
+ * @property {function} [beforeEach] See typedef (e.g. In Gherkin this could be statements defined by a `Background` block
+ *              and is the equivalent to the BDD framework's `beforeEach` function used by the `describe` function)
+ * @property {function} [afterAll] See typedef (e.g. Equivalent to the BDD framework's `after` (Mocha) or
+ *              `afterAll` (Jest) function used by the `describe` function)
+ * @property {function} [afterEach] See typedef (e.g. Equivalent to the BDD framework's `afterEach` function used by
+ *              the `describe` function)
+ * @property {function} [getFragmentSet] See typedef (Note: ran prior to any test execution)
+ * @property {exported-test[]} tests array of exported sets that are associated to the common feature/functionality
+ */
+export interface TestSuite {
+  readonly name: string,
+  readonly checkConditions?: Function,
+  readonly beforeAll?: Function,
+  readonly beforeEach?: Function,
+  readonly afterAll?: Function,
+  readonly afterEach?: Function,
+  readonly getFragmentSet?: Function,
+  readonly tests: ExportedTest[],
+}
+
+/**
+ * Defines the static methods of the TestParser Class
+ */
+export interface TestParserConstructor {
+  new (tests: TestSuite, wndwFragment: Window|DocumentFragment|HTMLElement): TestParserInterface,
+  isSuite: Function,
+  getTestType: Function,
+  getFragment: Function,
+}
+
+/**
+ * Defines the instance properties and methods of the TestParser class
+ */
+export interface TestParserInterface {
+  window: Window,
+  fragment: DocumentFragment,
+  doParseTest: Function,
+  getTest: Function,
+  createSuite: Function,
+  createFragmentSuite: Function,
+  createInheritedSuite: Function,
+  createTest: Function,
+  parser: Function,
+}
+
+/**
  * Base Exported Tests parser that is testing framework agnostic
  * @class
  */
-class TestParser {
+class TestParser implements TestParserInterface {
+  window = null;
+  fragment = null;
+
   /**
    * Determines if a test is a test-suite or exported-test
    * @param {test-suite|exported-test} test object that is either an instance of a test suite or an individual test
    * @returns {boolean} returns true for test-suite and false for exported-test; invalid structures will throw an error
    */
-  static isSuite(test) {
-    if (test.tests) {
-      if (!Array.isArray(test.tests)) {
+  static isSuite(test: TestSuite|ExportedTest): boolean | never {
+    if ((test as TestSuite).tests) {
+      if (!Array.isArray((test as TestSuite).tests)) {
         throw new Error('Test suites must include an array of tests');
       }
 
@@ -40,12 +122,12 @@ class TestParser {
    * @param {test-suite|exported-test} test see typedefs
    * @returns {string} string representing the type of test (available return values: `set`, `inherit`, or `default`)
    */
-  static getTestType(test) {
+  static getTestType(test: TestSuite|ExportedTest): string {
     if (typeof test.getFragmentSet === 'function') {
       // Test needs to run on multiple fragments
       return 'set';
     }
-    if (Array.isArray(test.inheritedTests)) {
+    if (Array.isArray((test as ExportedTest).inheritedTests)) {
       // Test is an inherited set of tests
       return 'inherit';
     }
@@ -59,7 +141,7 @@ class TestParser {
    * @param {DocumentFragment} fragment full document fragment
    * @returns {DocumentFragment} sub-fragment from Test Developer defined function or the default document
    */
-  static getFragment(test, fragment) {
+  static getFragment(test: ExportedTest, fragment: DocumentFragment): DocumentFragment {
     if (test && typeof test.getSubFragment === 'function') {
       return test.getSubFragment(fragment);
     }
@@ -69,23 +151,23 @@ class TestParser {
 
   /**
    * Initial setup for Test Parser
-   * @param {test-set[]} tests group of test suites to be executed on a particular application or page
+   * @param {test-suite} tests group of test suites to be executed on a particular application or page
    * @param {Window|DocumentFragment|HTMLElement} wndwFragment JavaScript window object or Document Fragment object
    */
-  constructor(tests, wndwFragment) {
+  constructor(tests: TestSuite, wndwFragment: Window|DocumentFragment|HTMLElement) {
     // if wndwFragment is a Window, get fragment from wndwFragment
-    if (wndwFragment.window === wndwFragment && wndwFragment.document) {
+    if ((wndwFragment as Window).window === wndwFragment && wndwFragment.document) {
       this.window = wndwFragment;
       this.fragment = wndwFragment.document;
     }
     // wndwFragment is a DocumentFragment
-    else if (wndwFragment.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+    else if ((wndwFragment as DocumentFragment).nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
       this.fragment = wndwFragment;
     }
     // wndwFragment is an HTMLElement, convert to DocumentFragment
-    else if (wndwFragment.nodeType === Node.ELEMENT_NODE) {
+    else if ((wndwFragment as HTMLElement).nodeType === Node.ELEMENT_NODE) {
       const template = document.createElement('template');
-      template.innerHTML = wndwFragment.outerHTML;
+      template.innerHTML = (wndwFragment as HTMLElement).outerHTML;
       this.fragment = template.content;
     } else {
       throw new Error(
@@ -101,7 +183,7 @@ class TestParser {
    * Bind public functions so that the reference to `this` is always accurate
    * @private
    */
-  _bindFunctions() {
+  private _bindFunctions(): void {
     // Bind functions
     const publicFunctions = {
       createSuite: this.createSuite,
@@ -127,7 +209,7 @@ class TestParser {
    * // input: `/examples/exported-tests.js`
    * // expected BDD output:`/examples/expected-BDD.js`
    */
-  doParseTest(conditions, fragment, index) {
+  doParseTest(conditions?: Function, fragment?: DocumentFragment, index?: number): boolean {
     return (
       typeof conditions === 'undefined' ||
       conditions(fragment, this.window, index)
@@ -140,7 +222,7 @@ class TestParser {
    * @param {DocumentFragment} [fragment] document fragment being tested
    * @param {integer} [index] current index when running a `set` of fragments
    */
-  getTest(exportedTest, fragment, index) {
+  getTest(exportedTest: ExportedTest, fragment?: DocumentFragment, index?: number): void {
     if (this.doParseTest(exportedTest.checkConditions, fragment, index)) {
       this.createTest(exportedTest, fragment, index);
     }
@@ -149,7 +231,7 @@ class TestParser {
   /**
    * Parses a test suite in to a given testing framework. For more details/examples see `parsers/BDD.js`
    */
-  createSuite() {
+  createSuite(e: ExportedTest, f: DocumentFragment, i: number): void {
     console.warn(
       'Exported Tests: createSuite is a framework specific function that needs to be defined'
     );
@@ -159,7 +241,7 @@ class TestParser {
    * Parses multiple test suites to iterate over multiple document fragments. Testing framework specific
    * implementation required. For more details/examples see `parsers/BDD.js`
    */
-  createFragmentSuite() {
+  createFragmentSuite(e: ExportedTest, f: DocumentFragment, i: number): void {
     console.warn(
       'Exported Tests: createFragmentSuite is a framework specific function that needs to be defined'
     );
@@ -169,7 +251,7 @@ class TestParser {
    * Parses a test suite(s) from imported tests of a given component. Testing framework specific
    * implementation required. For more details/examples see `parsers/BDD.js`
    */
-  createInheritedSuite() {
+  createInheritedSuite(e: ExportedTest, f: DocumentFragment, i: number): void {
     console.warn(
       'Exported Tests: createInheritedSuite is a framework specific function that needs to be defined'
     );
@@ -179,7 +261,7 @@ class TestParser {
    * Converts an individual test in to a testing framework specific test. Testing framework specific
    * implementation required. For more details/examples see `parsers/BDD.js`
    */
-  createTest() {
+  createTest(e: ExportedTest, f: DocumentFragment, i: number): void {
     console.warn(
       'Exported Tests: createTest is a framework specific function that needs to be defined'
     );
@@ -187,35 +269,35 @@ class TestParser {
 
   /**
    * Iterates over test suites to parse them in to a specific testing framework.
-   * @param {test-suite[]} tests array of test-suites to be executed on a particular application or page
+   * @param {test-suite} tests array of test-suites to be executed on a particular application or page
    * @param {DocumentFragment} fragment document fragment being tested
    * @param {integer} [index] current index when running a `set` of fragments
    */
-  parser(tests, fragment, index) {
+  parser(tests: TestSuite, fragment: DocumentFragment, index?: number) {
     // Is possible and okay to have an empty array. In this case the test parser just doesn't do anything
     if (!Array.isArray(tests)) {
       throw new Error('Test parser requires an array of test-suite objects');
     }
 
     tests.forEach(test => {
-      if (this.constructor.isSuite(test)) {
-        const testSuiteType = {
+      if ((this.constructor as TestParserConstructor).isSuite(test)) {
+        const testSuiteType: Function = {
           set: this.createFragmentSuite,
           default: this.createSuite,
-        }[this.constructor.getTestType(test)];
+        }[(this.constructor as TestParserConstructor).getTestType(test)];
 
         testSuiteType(test, fragment, index, this.createSuite);
       } else {
         // test is an exported-test
-        const testType = {
+        const testType: Function = {
           set: this.createFragmentSuite,
           inherit: this.createInheritedSuite,
           default: this.getTest,
-        }[this.constructor.getTestType(test)];
+        }[(this.constructor as TestParserConstructor).getTestType(test)];
 
         testType(
           test,
-          this.constructor.getFragment(test, fragment),
+          (this.constructor as TestParserConstructor).getFragment(test, fragment),
           index,
           this.getTest
         );

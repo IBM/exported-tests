@@ -13,11 +13,19 @@
   "engines": {
     "node": "^10"
   },
-  "main": "index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "browser": "dist/umd/index.js",
+  "files": [
+    "dist/**/*",
+    "index.js",
+    "es5.js",
+    "es5.js.map"
+  ],
   "source": true,
   "scripts": {
     "test": "mocha",
-    "build": "NODE_ENV=production parcel build index.js --out-dir . --out-file es5 --no-minify --target browser",
+    "build": "rollup -c",
     "lint": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {},
@@ -28,6 +36,7 @@
     "@babel/plugin-syntax-object-rest-spread": "7.7.4",
     "@babel/preset-env": "7.7.4",
     "@babel/register": "7.7.4",
+    "@rollup/plugin-babel": "5.0.0",
     "bufferutil": "4.0.1",
     "canvas": "2.5.0",
     "chai": "4.2.0",
@@ -36,7 +45,8 @@
     "jsdom-global": "3.0.2",
     "lodash": "4.17.15",
     "mocha": "6.2.3",
-    "parcel-bundler": "1.12.4",
+    "rollup": "2.9.1",
+    "rollup-plugin-terser": "5.3.0",
     "utf-8-validate": "5.0.2"
   },
   "mocha": {

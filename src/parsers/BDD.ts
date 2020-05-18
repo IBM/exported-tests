@@ -5,8 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import TestParser from './base';
-import bindFunctions from '../utilities/bind-functions';
+import TestParser, { TestSuite, ExportedTest } from './base';
 
 /**
  * BDD supported Exported Tests' `beforeAll` function.
@@ -46,22 +45,6 @@ import bindFunctions from '../utilities/bind-functions';
  */
 class BDDTestParser extends TestParser {
   /**
-   * Overwrite TestParser bindFunctions to include BDD unique functions
-   * @private
-   */
-  _bindFunctions() {
-    super._bindFunctions();
-
-    // Bind functions
-    const publicFunctions = {
-      suiteSetup: this.suiteSetup,
-      suiteCleanup: this.suiteCleanup,
-    };
-
-    bindFunctions(publicFunctions, this);
-  }
-
-  /**
    * BDD Describe function setup. This function converts Exported Tests `beforeAll` and `beforeEach` functions
    * in to describe function's `before(All)` and `before` functions using the done function to denote the end
    * of execution for the setup.
@@ -73,10 +56,13 @@ class BDDTestParser extends TestParser {
    * // For sample input and output code see Examples 1 - 3:
    * // input: `/examples/exported-tests.js`
    * // expected output:`/examples/expected-BDD.js`
+   *
+   * @todo We know `before` does not exist on TestSuite which is what the check is for. Would this error
+   *    handling now be done by TypeScript and we can remove it from our source code?
    */
-  suiteSetup(test, fragment) {
+  suiteSetup(test: TestSuite, fragment: DocumentFragment): void {
     if (typeof test.before === 'function') {
-      console.warning(
+      console.warn(
         'Exported Tests do not support `before` use the `beforeAll` property instead'
       );
     }
@@ -103,9 +89,9 @@ class BDDTestParser extends TestParser {
    * @param {DocumentFragment} fragment fragment being tested
    * @private
    */
-  suiteCleanup(test, fragment) {
+  suiteCleanup(test: TestSuite, fragment: DocumentFragment): void {
     if (typeof test.after === 'function') {
-      console.warning(
+      console.warn(
         'Exported Tests do not support `after` use the `afterAll` property instead'
       );
     }
@@ -129,23 +115,22 @@ class BDDTestParser extends TestParser {
    * by `createFragmentSuite` (via the `testFunction` parameter) so `suiteSetup/Cleanup` is only performed once even
    * when there are multiple `describe`s
    * @param {test-suite} suite see typedef
-   * @param {DocumentFragment} [fragment]  fragment being tested
+   * @param {DocumentFragment} fragment  fragment being tested
    * @param {integer} [index] current index when running a `set` of fragments
    * @param {boolean} [includeSetupCleanup=true] flag to determine if the  describe set should have setup and
    *          clean up functions applied since with fragment sets we have additional describe groupings
-   * @private
    *
    * @example
    * // For sample input and output code see Example 7:
    * // input: `./examples/exported-tests.js`
    * // expected output:`/examples/expected-BDD.js`
    */
-  createSuite(suite, fragment, index, includeSetupCleanup = true) {
+  createSuite(suite: TestSuite, fragment: DocumentFragment, index?: number, includeSetupCleanup: boolean = true) {
     if (this.doParseTest(suite.checkConditions, fragment, index)) {
       if (includeSetupCleanup) {
         describe(suite.name, () => {
           this.suiteSetup(suite, fragment);
-          this.parser(suite.tests, fragment, index);
+          this.parser((suite).tests, fragment, index);
           this.suiteCleanup(suite, fragment);
         });
       } else {
@@ -160,14 +145,13 @@ class BDDTestParser extends TestParser {
    * @param {DocumentFragment} fragment document fragment being tested
    * @param {null} _ typically the index parameter that is not required for this function
    * @param {function} testFunction function that creates a test set or individual tests
-   * @private
    *
    * @example
    * // For sample input and output code see Examples 8 - 9:
    * // input: `/examples/exported-tests.js`
    * // expected output:`/examples/expected-BDD.js`
    */
-  createFragmentSuite(test, fragment, _, testFunction) {
+  createFragmentSuite(test: TestSuite, fragment: DocumentFragment, _: null, testFunction: Function): void {
     describe(test.name, () => {
       this.suiteSetup(test, fragment);
       test.getFragmentSet(fragment).forEach((frag, i) => {
@@ -191,7 +175,7 @@ class BDDTestParser extends TestParser {
    * // input: `./examples/exported-tests.js`
    * // expected output:`/examples/expected-BDD.js`
    */
-  createInheritedSuite(test, fragment, index) {
+  createInheritedSuite(test: ExportedTest, fragment: DocumentFragment, index?: number) {
     describe(test.name, () => {
       this.parser(test.inheritedTests, fragment, index);
     });
@@ -203,7 +187,7 @@ class BDDTestParser extends TestParser {
    * @param {DocumentFragment} fragment document fragment being tested
    * @param {integer} [index] index when testing a fragment set
    */
-  createTest(exportedTest, fragment, index) {
+  createTest(exportedTest: ExportedTest, fragment: DocumentFragment, index?: number) {
     if (
       typeof exportedTest.getActual !== 'function' ||
       typeof exportedTest.runComparison !== 'function' ||

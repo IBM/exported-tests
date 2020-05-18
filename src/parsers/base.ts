@@ -34,6 +34,7 @@ export interface ExportedTest {
  * @typedef {object} test-suite
  * @property {string} name Name for the grouping of tests (e.g. In Gherkin this would be the `Feature`,
  *              where in BDD this is the `describe` function)
+ * @property {exported-test[]} tests array of exported sets that are associated to the common feature/functionality
  * @property {function} [checkConditions] See typedef (e.g. In Gherkin this could be statements defined by a `Background` block)
  *              (Note: ran prior to any test execution)
  * @property {function} [beforeAll] See typedef (e.g. In Gherkin this could be statements defined by a `Background` block
@@ -46,17 +47,19 @@ export interface ExportedTest {
  * @property {function} [afterEach] See typedef (e.g. Equivalent to the BDD framework's `afterEach` function used by
  *              the `describe` function)
  * @property {function} [getFragmentSet] See typedef (Note: ran prior to any test execution)
- * @property {exported-test[]} tests array of exported sets that are associated to the common feature/functionality
+ * @property {string} [fragmentSetMessage] String used as a suite description when creating tests for a fragment set.
+ *    Default is `Set index: ${SET_INDEX}`
  */
 export interface TestSuite {
   readonly name: string,
+  readonly tests: ExportedTest[],
   readonly checkConditions?: Function,
   readonly beforeAll?: Function,
   readonly beforeEach?: Function,
   readonly afterAll?: Function,
   readonly afterEach?: Function,
   readonly getFragmentSet?: Function,
-  readonly tests: ExportedTest[],
+  readonly fragmentSetMessage?: String
 }
 
 /**
@@ -209,7 +212,7 @@ class TestParser implements TestParserInterface {
   /**
    * Parses a test suite in to a given testing framework. For more details/examples see `parsers/BDD.js`
    */
-  createSuite(e: ExportedTest, f: DocumentFragment, i: number): void {
+  createSuite(s: TestSuite, f: DocumentFragment, i: number): void {
     console.warn(
       'Exported Tests: createSuite is a framework specific function that needs to be defined'
     );
@@ -219,7 +222,7 @@ class TestParser implements TestParserInterface {
    * Parses multiple test suites to iterate over multiple document fragments. Testing framework specific
    * implementation required. For more details/examples see `parsers/BDD.js`
    */
-  createFragmentSuite(e: ExportedTest, f: DocumentFragment, i: number): void {
+  createFragmentSuite(s: TestSuite, f: DocumentFragment, i: number, testFunction?: Function): void {
     console.warn(
       'Exported Tests: createFragmentSuite is a framework specific function that needs to be defined'
     );
@@ -251,7 +254,7 @@ class TestParser implements TestParserInterface {
    * @param {DocumentFragment} fragment document fragment being tested
    * @param {integer} [index] current index when running a `set` of fragments
    */
-  parser(tests: TestSuite[], fragment: DocumentFragment, index?: number) {
+  parser(tests: TestSuite[]|ExportedTest[], fragment: DocumentFragment, index?: number) {
     // Is possible and okay to have an empty array. In this case the test parser just doesn't do anything
     if (!Array.isArray(tests)) {
       throw new Error('Test parser requires an array of test-suite objects');

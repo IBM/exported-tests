@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import bindFunctions from '../utilities/bind-functions';
-
 /**
  * Exported Tests individual test structure
  * @typicalname Individual test object structure
@@ -26,8 +24,8 @@ export interface ExportedTest {
   readonly inheritedTests?: TestSuite[],
   readonly getFragmentSet?: Function,
   readonly getSubFragment?: Function,
-  readonly getActual: Function,
-  readonly runComparison: Function,
+  readonly getActual?: Function,
+  readonly runComparison?: Function,
 }
 
 /**
@@ -154,7 +152,7 @@ class TestParser implements TestParserInterface {
    * @param {test-suite} tests group of test suites to be executed on a particular application or page
    * @param {Window|DocumentFragment|HTMLElement} wndwFragment JavaScript window object or Document Fragment object
    */
-  constructor(tests: TestSuite, wndwFragment: Window|DocumentFragment|HTMLElement) {
+  constructor(tests: TestSuite[], wndwFragment: Window|DocumentFragment|HTMLElement) {
     // if wndwFragment is a Window, get fragment from wndwFragment
     if ((wndwFragment as Window).window === wndwFragment && wndwFragment.document) {
       this.window = wndwFragment;
@@ -175,27 +173,7 @@ class TestParser implements TestParserInterface {
       );
     }
 
-    this._bindFunctions();
     this.parser(tests, this.fragment);
-  }
-
-  /**
-   * Bind public functions so that the reference to `this` is always accurate
-   * @private
-   */
-  private _bindFunctions(): void {
-    // Bind functions
-    const publicFunctions = {
-      createSuite: this.createSuite,
-      createInheritedSuite: this.createInheritedSuite,
-      createFragmentSuite: this.createFragmentSuite,
-      createTest: this.createTest,
-      getTest: this.getTest,
-      doParseTest: this.doParseTest,
-      parser: this.parser,
-    };
-
-    bindFunctions(publicFunctions, this);
   }
 
   /**
@@ -273,7 +251,7 @@ class TestParser implements TestParserInterface {
    * @param {DocumentFragment} fragment document fragment being tested
    * @param {integer} [index] current index when running a `set` of fragments
    */
-  parser(tests: TestSuite, fragment: DocumentFragment, index?: number) {
+  parser(tests: TestSuite[], fragment: DocumentFragment, index?: number) {
     // Is possible and okay to have an empty array. In this case the test parser just doesn't do anything
     if (!Array.isArray(tests)) {
       throw new Error('Test parser requires an array of test-suite objects');

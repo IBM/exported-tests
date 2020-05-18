@@ -24,10 +24,11 @@ yarn
 
 We distribute Exported Tests as ES6 and ES5 modules for backward-compatibility support of various testing frameworks. Import the desired module type from the following locations:
 
-* ES6 - `index.js`
-* ES5 - `es5.js`
+* ES 2015 (ES6) Modules- `dist/es/index.js`
+* Common JS (ES5) - `dist/cjs/index.js`
+* Browser compatible (UMD) - `dist/umd/index.js`
 
-To run the transpiler and generate the ES5 modules use this command:
+To run the transpiler and generate the previous files use this command:
 
 ```bash
 yarn build

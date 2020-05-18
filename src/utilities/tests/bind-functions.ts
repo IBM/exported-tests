@@ -10,14 +10,14 @@ import bindFunctions from '../bind-functions';
 
 describe('bindFunctions applies the class instance to a function', () => {
   interface FixtureInterface {
-    instanceProperty: string,
-    myInstanceMethod: Function,
+    instanceProperty: string;
+    myInstanceMethod: Function;
   }
 
   class Fixture implements FixtureInterface {
     instanceProperty = null;
 
-    myInstanceMethod() {
+    myInstanceMethod(): string {
       return this.instanceProperty;
     }
 

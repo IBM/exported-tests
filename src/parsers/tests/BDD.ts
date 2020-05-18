@@ -145,6 +145,4 @@ describe('BDDTestParser', () => {
     })[0];
     new BDDTestParser([singleTest], testFrag);
   });
-
-  describe('window tested is dynamic', () => {});
 });

@@ -11,7 +11,7 @@ import { expect } from 'chai';
  * @param {TestParser} parser Test parser class (or class that inherits TestParser)
  * @private
  */
-const parserStaticFunctions = parser => {
+const parserStaticFunctions = (parser): void => {
   expect(parser.isSuite).to.be.a('function');
   expect(parser.getTestType).to.be.a('function');
   expect(parser.getFragment).to.be.a('function');
@@ -22,7 +22,7 @@ const parserStaticFunctions = parser => {
  * @param {TestParser} parser Test parser class (or class that inherits TestParser)
  * @private
  */
-const parserFunctions = parser => {
+const parserFunctions = (parser): void => {
   expect(parser.getTest).to.be.a('function');
   expect(parser.doParseTest).to.be.a('function');
   expect(parser.createSuite).to.be.a('function');

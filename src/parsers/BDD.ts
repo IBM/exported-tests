@@ -48,7 +48,7 @@ class BDDTestParser extends TestParser {
    * Overwrite TestParser bindFunctions to include BDD unique functions
    * @private
    */
-  _bindFunctions() {
+  _bindFunctions(): void {
     super._bindFunctions();
 
     // Bind functions
@@ -133,7 +133,7 @@ class BDDTestParser extends TestParser {
    * // input: `./examples/exported-tests.js`
    * // expected output:`/examples/expected-BDD.js`
    */
-  createSuite(suite: TestSuite, fragment: DocumentFragment, index?: number, includeSetupCleanup: boolean = true) {
+  createSuite(suite: TestSuite, fragment: DocumentFragment, index?: number, includeSetupCleanup = true): void {
     if (this.doParseTest(suite.checkConditions, fragment, index)) {
       if (includeSetupCleanup) {
         describe(suite.name, () => {
@@ -183,7 +183,7 @@ class BDDTestParser extends TestParser {
    * // input: `./examples/exported-tests.js`
    * // expected output:`/examples/expected-BDD.js`
    */
-  createInheritedSuite(test: ExportedTest, fragment: DocumentFragment, index?: number) {
+  createInheritedSuite(test: ExportedTest, fragment: DocumentFragment, index?: number): void {
     describe(test.name, () => {
       this.parser(test.inheritedTests, fragment, index);
     });
@@ -195,7 +195,7 @@ class BDDTestParser extends TestParser {
    * @param {DocumentFragment} fragment document fragment being tested
    * @param {integer} [index] index when testing a fragment set
    */
-  createTest(exportedTest: ExportedTest, fragment: DocumentFragment, index?: number) {
+  createTest(exportedTest: ExportedTest, fragment: DocumentFragment, index?: number): void {
     if (
       typeof exportedTest.getActual !== 'function' ||
       typeof exportedTest.runComparison !== 'function' ||

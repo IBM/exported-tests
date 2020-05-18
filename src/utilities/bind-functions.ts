@@ -12,7 +12,7 @@
  * @todo Is there a way to have `classInstances` typed to a ES6 class?  I tried Function which is what it's
  *    transpiled to but received TypeScript errors when trying to reference methods and properties
  */
-const bindFunctions = (functionObj: object, classInstance: any) => {
+const bindFunctions = (functionObj: object, classInstance): void => {
   Object.keys(functionObj).forEach(name => {
     classInstance[name] = functionObj[name].bind(classInstance);
   });

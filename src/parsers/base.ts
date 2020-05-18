@@ -22,13 +22,13 @@ import bindFunctions from '../utilities/bind-functions';
  * @property {function} runComparison See typedef
  */
 export interface ExportedTest {
-  readonly name: string,
-  readonly checkConditions?: Function,
-  readonly inheritedTests?: TestSuite[],
-  readonly getFragmentSet?: Function,
-  readonly getSubFragment?: Function,
-  readonly getActual?: Function,
-  readonly runComparison?: Function,
+  readonly name: string;
+  readonly checkConditions?: Function;
+  readonly inheritedTests?: TestSuite[];
+  readonly getFragmentSet?: Function;
+  readonly getSubFragment?: Function;
+  readonly getActual?: Function;
+  readonly runComparison?: Function;
 }
 
 /**
@@ -54,40 +54,40 @@ export interface ExportedTest {
  *    Default is `Set index: ${SET_INDEX}`
  */
 export interface TestSuite {
-  readonly name: string,
-  readonly tests: ExportedTest[],
-  readonly checkConditions?: Function,
-  readonly beforeAll?: Function,
-  readonly beforeEach?: Function,
-  readonly afterAll?: Function,
-  readonly afterEach?: Function,
-  readonly getFragmentSet?: Function,
-  readonly fragmentSetMessage?: string
+  readonly name: string;
+  readonly tests: ExportedTest[];
+  readonly checkConditions?: Function;
+  readonly beforeAll?: Function;
+  readonly beforeEach?: Function;
+  readonly afterAll?: Function;
+  readonly afterEach?: Function;
+  readonly getFragmentSet?: Function;
+  readonly fragmentSetMessage?: string;
 }
 
 /**
  * Defines the static methods of the TestParser Class
  */
 export interface TestParserConstructor {
-  new (tests: TestSuite, wndwFragment: Window|DocumentFragment|HTMLElement|DOMWindow): TestParserInterface,
-  isSuite: Function,
-  getTestType: Function,
-  getFragment: Function,
+  new (tests: TestSuite, wndwFragment: Window|DocumentFragment|HTMLElement|DOMWindow): TestParserInterface;
+  isSuite: Function;
+  getTestType: Function;
+  getFragment: Function;
 }
 
 /**
  * Defines the instance properties and methods of the TestParser class
  */
 export interface TestParserInterface {
-  window: Window|DOMWindow,
-  fragment: DocumentFragment,
-  doParseTest: Function,
-  getTest: Function,
-  createSuite: Function,
-  createFragmentSuite: Function,
-  createInheritedSuite: Function,
-  createTest: Function,
-  parser: Function,
+  window: Window|DOMWindow;
+  fragment: DocumentFragment;
+  doParseTest: Function;
+  getTest: Function;
+  createSuite: Function;
+  createFragmentSuite: Function;
+  createInheritedSuite: Function;
+  createTest: Function;
+  parser: Function;
 }
 
 /**
@@ -205,7 +205,7 @@ class TestParser implements TestParserInterface {
    * Bind public functions so that the reference to `this` is always accurate
    * @private
    */
-  _bindFunctions() {
+  _bindFunctions(): void {
     // Bind functions
     const publicFunctions = {
       createSuite: this.createSuite,
@@ -239,16 +239,25 @@ class TestParser implements TestParserInterface {
     console.warn(
       'Exported Tests: createSuite is a framework specific function that needs to be defined'
     );
+    console.log('Parameters allowed/value passed in:');
+    console.log(`Test Suite: ${s}`);
+    console.log(`Document Fragment: ${f}`);
+    console.log(`Optional set index: ${i}`);
   }
 
   /**
    * Parses multiple test suites to iterate over multiple document fragments. Testing framework specific
    * implementation required. For more details/examples see `parsers/BDD.js`
    */
-  createFragmentSuite(s: TestSuite, f: DocumentFragment, i: number, testFunction?: Function): void {
+  createFragmentSuite(s: TestSuite, f: DocumentFragment, i: number, tf?: Function): void {
     console.warn(
       'Exported Tests: createFragmentSuite is a framework specific function that needs to be defined'
     );
+    console.log('Parameters allowed/value passed in:');
+    console.log(`Test Suite: ${s}`);
+    console.log(`Document Fragment: ${f}`);
+    console.log(`Optional set index: ${i}`);
+    console.log(`Optional function to create test: ${tf}`);
   }
 
   /**
@@ -259,6 +268,10 @@ class TestParser implements TestParserInterface {
     console.warn(
       'Exported Tests: createInheritedSuite is a framework specific function that needs to be defined'
     );
+    console.log('Parameters allowed/value passed in:');
+    console.log(`Exported Test: ${e}`);
+    console.log(`Document Fragment: ${f}`);
+    console.log(`Optional set index: ${i}`);
   }
 
   /**
@@ -269,6 +282,10 @@ class TestParser implements TestParserInterface {
     console.warn(
       'Exported Tests: createTest is a framework specific function that needs to be defined'
     );
+    console.log('Parameters allowed/value passed in:');
+    console.log(`Exported Test: ${e}`);
+    console.log(`Document Fragment: ${f}`);
+    console.log(`Optional set index: ${i}`);
   }
 
   /**
@@ -277,7 +294,7 @@ class TestParser implements TestParserInterface {
    * @param {DocumentFragment} fragment document fragment being tested
    * @param {integer} [index] current index when running a `set` of fragments
    */
-  parser(tests: TestSuite[]|ExportedTest[], fragment: DocumentFragment, index?: number) {
+  parser(tests: TestSuite[]|ExportedTest[], fragment: DocumentFragment, index?: number): void {
     // Is possible and okay to have an empty array. In this case the test parser just doesn't do anything
     if (!Array.isArray(tests)) {
       throw new Error('Test parser requires an array of test-suite objects');

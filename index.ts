@@ -115,39 +115,4 @@ import BDDTestParser from './src/parsers/BDD';
  * @typedef {function} afterEach
  */
 
-/**
- * Exported Tests individual test structure
- * @typicalname Individual test object structure
- * @typedef {object} exported-test
- * @property {string} name Test name (e.g. In Gherkin this would be the `Scenario`, where in BDD this is the `it` function)
- * @property {function} [checkConditions] See typedef (e.g. In Gherkin this could be statements defined by the `Given` step)
- *              (Note: ran prior to any test execution)
- * @property {test-suite[]} [inheritedTests] Set of tests or test suites that are imported from another component
- * @property {function} [getFragmentSet] See typedef (Note: ran prior to any test execution)
- * @property {function} [getSubFragment] See typedef (Note: ran prior to any test execution)
- * @property {function} getActual See typedef
- * @property {function} runComparison See typedef
- */
-
-/**
- * Exported Tests that are grouped together in a single suite based on relationship to a single feature/functionality
- * @typicalname Test suite object structure
- * @typedef {object} test-suite
- * @property {string} name Name for the grouping of tests (e.g. In Gherkin this would be the `Feature`,
- *              where in BDD this is the `describe` function)
- * @property {function} [checkConditions] See typedef (e.g. In Gherkin this could be statements defined by a `Background` block)
- *              (Note: ran prior to any test execution)
- * @property {function} [beforeAll] See typedef (e.g. In Gherkin this could be statements defined by a `Background` block
- *              and is the  equivalent to the BDD framework's `before` (Mocha) or `beforeAll` (Jest) function used
- *              by the `describe` function)
- * @property {function} [beforeEach] See typedef (e.g. In Gherkin this could be statements defined by a `Background` block
- *              and is the equivalent to the BDD framework's `beforeEach` function used by the `describe` function)
- * @property {function} [afterAll] See typedef (e.g. Equivalent to the BDD framework's `after` (Mocha) or
- *              `afterAll` (Jest) function used by the `describe` function)
- * @property {function} [afterEach] See typedef (e.g. Equivalent to the BDD framework's `afterEach` function used by
- *              the `describe` function)
- * @property {function} [getFragmentSet] See typedef (Note: ran prior to any test execution)
- * @property {exported-test[]} tests array of exported sets that are associated to the common feature/functionality
- */
-
 export { TestParser, BDDTestParser };

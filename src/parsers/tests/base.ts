@@ -10,12 +10,7 @@ import { JSDOM } from 'jsdom';
 import TestParser from '../base';
 import divHTML from './fixtures/div-html';
 import { parserStaticFunctions, parserFunctions } from './fixtures/shared-tests';
-
-/**
- * Options when creating the window/document from the HTML that's being tested
- * @type {object}
- */
-const JSDOMoptions = { resources: 'usable' };
+import JSDOMoptions from './fixtures/jsdom-options';
 
 /**
  * Adjusts global window and document to be from the HTML we're gonna test

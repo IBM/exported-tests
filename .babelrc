@@ -13,5 +13,7 @@
     "@babel/plugin-proposal-function-bind",
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-syntax-object-rest-spread"
-  ]
+  ],
+  "sourceMaps": true,
+  "inputSourceMap": true
 }

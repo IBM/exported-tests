@@ -85,5 +85,9 @@ Temporary Items
 .vscode/settings.json
 
 ## Distributed files
+dist
+
+## Deprecated distributed files
 es5.js
 es5.js.map
+index.js

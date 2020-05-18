@@ -11,9 +11,12 @@
  * @param  {class} classInstance ES6 class instance (`this`)
  * @param  {string[]} classInstance list of functions that should bound to the class constructor instead of
  *            the specific instance
+ * @todo is there a way to define `classInstance` as a generic CS6 class?
+ *    If I define it as a Function (which is what a Class transpiled to),
+ *    it throws and error in `base.ts` when we pass `this` which is a TestParser
  */
-const bindFunctions = (functionObj: object, classInstance: Function, bindToConstructor: string[] = []): void => {
-    const SELF: Function = classInstance;
+const bindFunctions = (functionObj: object, classInstance: any, bindToConstructor: string[] = []): void => {
+    const SELF = classInstance;
 
     Object.keys(functionObj).forEach((name: string) => {
       if (bindToConstructor.includes(name)) {

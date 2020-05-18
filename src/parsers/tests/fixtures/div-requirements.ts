@@ -10,8 +10,9 @@
  * Note: this file simplifies the Exported Tests structure for clarity of what is actually part of tests and test suites.
  * In most real-world, use cases an ES6 JavaScript class would be used for encapsulation, inheritance, and flexibility.
  */
-import merge from 'lodash/merge';
+import { merge } from 'lodash';
 import { expect } from 'chai';
+import { TestSuite, ExportedTest } from '../../base';
 
 /**
  * Div Test element structure
@@ -21,6 +22,12 @@ import { expect } from 'chai';
  * @property {string} paragraphs - paragraph content containers
  * @property {string} input - input element
  */
+export interface Elements {
+  root?: string,
+  content?: string,
+  paragraphs?: string,
+  input?: string,
+};
 
 /**
  * Div Test configurations
@@ -29,12 +36,17 @@ import { expect } from 'chai';
  * @property {elements} classes - classes applied to selectors
  * @property {string} inputID - ID attribute of `INPUT` element
  */
+export interface Config {
+  selectors?: Elements,
+  classes?: Elements,
+  inputID?: string,
+};
 
 /**
  * Default test configuration
  * @type {config}
  */
-const defaults = {
+const defaults: Config = {
   selectors: {
     root: 'div',
     content: 'span',
@@ -47,13 +59,20 @@ const defaults = {
   inputID: 'my-input',
 };
 
+interface DivElements {
+  div: Element,
+  content: Element,
+  pSet: NodeListOf<Element>,
+  input: Element|HTMLInputElement,
+};
+
 /**
  * Grabs Div component elements from a DOM
  * @param {DocumentFragment} docFragment - JavaScript document or JSDOM fragment
  * @param {elements} selectors
  * @returns {object} elements gathered from the selectors object
  */
-const getDiv = (docFragment, selectors) => {
+const getDiv = (docFragment: DocumentFragment, selectors: Elements): DivElements => {
   const div = docFragment.querySelector(selectors.root);
   const content = div.querySelector(selectors.content);
   const pSet = div.querySelectorAll(selectors.paragraphs);
@@ -73,7 +92,7 @@ const getDiv = (docFragment, selectors) => {
  * @param {DocumentFragment} docFragment JavaScript document or JSDOM fragment
  * @param {Window} wndw=window JavaScript Window object
  */
-const beforeAll = (done, docFragment, wndw = window) => {
+const beforeAll = (done: Function, docFragment: DocumentFragment, wndw: Window = window): void => {
   const div = wndw.document.createElement('DIV');
   div.classList.add('beforeAll');
   wndw.document.body.appendChild(div);
@@ -86,7 +105,7 @@ const beforeAll = (done, docFragment, wndw = window) => {
  * @param {DocumentFragment} docFragment JavaScript document or JSDOM fragment
  * @param {Window} wndw=window JavaScript Window object
  */
-const beforeEach = (done, docFragment, wndw = window) => {
+const beforeEach = (done: Function, docFragment: DocumentFragment, wndw: Window = window): void => {
   const div = wndw.document.createElement('DIV');
   div.classList.add('beforeEach');
   wndw.document.body.appendChild(div);
@@ -99,7 +118,7 @@ const beforeEach = (done, docFragment, wndw = window) => {
  * @param {DocumentFragment} docFragment JavaScript document or JSDOM fragment
  * @param {Window} wndw=window JavaScript Window object
  */
-const afterAll = (done, docFragment, wndw = window) => {
+const afterAll = (done: Function, docFragment: DocumentFragment, wndw: Window = window): void => {
   const div = wndw.document.createElement('DIV');
   div.classList.add('afterAll');
   wndw.document.body.appendChild(div);
@@ -112,7 +131,7 @@ const afterAll = (done, docFragment, wndw = window) => {
  * @param {DocumentFragment} docFragment JavaScript document or JSDOM fragment
  * @param {Window} wndw=window JavaScript Window object
  */
-const afterEach = (done, docFragment, wndw = window) => {
+const afterEach = (done: Function, docFragment: DocumentFragment, wndw: Window = window): void => {
   const div = wndw.document.createElement('DIV');
   div.classList.add('afterEach');
   wndw.document.body.appendChild(div);
@@ -124,7 +143,7 @@ const afterEach = (done, docFragment, wndw = window) => {
  * @param {config} config see typedef
  * @return {test-set[]} test objects for use in `testRunner`
  */
-export default config => {
+const DivTests: Function = (config: Config): (TestSuite|ExportedTest)[] => {
   const settings = merge({}, defaults, config);
 
   /**
@@ -184,13 +203,15 @@ export default config => {
           getActual: (docFragment, wndw = window) =>
             new Promise(resolve => {
               const component = getDiv(docFragment, settings.selectors);
-              const results = {};
-              results.inputID = component.input.id;
-              results.initial = component.input.checked;
+              const results = {
+                inputID: component.input.id,
+                initial: (component.input as HTMLInputElement).checked,
+                input: wndw.document.getElementById(component.input.id),
+                after: null,
+              };
 
-              results.input = wndw.document.getElementById(component.input.id);
               results.input.click();
-              results.after = results.input.checked;
+              results.after = (results.input as HTMLInputElement).checked;
 
               resolve(results);
             }),
@@ -506,3 +527,5 @@ export default config => {
     },
   ];
 };
+
+export default DivTests;

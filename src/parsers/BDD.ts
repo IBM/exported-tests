@@ -77,6 +77,13 @@ class BDDTestParser extends TestParser {
    *    handling now be done by TypeScript and we can remove it from our source code?
    */
   suiteSetup(test: TestSuite, fragment: DocumentFragment): void {
+    // @ts-ignore
+    if (typeof test.before === 'function') {
+      console.warn(
+        'Exported Tests do not support `before` use the `beforeAll` property instead'
+      );
+    }
+
     const wndw = this.window;
     if (typeof test.beforeAll === 'function') {
       // Mocha uses the before function; Jest uses beforeAll
@@ -102,6 +109,13 @@ class BDDTestParser extends TestParser {
    * @private
    */
   suiteCleanup(test: TestSuite, fragment: DocumentFragment): void {
+    // @ts-ignore
+    if (typeof test.after === 'function') {
+      console.warn(
+        'Exported Tests do not support `after` use the `afterAll` property instead'
+      );
+    }
+
     const wndw = this.window;
     if (typeof test.afterAll === 'function') {
       // Mocha uses the after function; Jest uses afterAll

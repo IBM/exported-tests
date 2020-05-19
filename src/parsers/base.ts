@@ -95,8 +95,8 @@ export interface TestParserInterface {
  * @class
  */
 class TestParser implements TestParserInterface {
-  window = null;
-  fragment = null;
+  window = undefined;
+  fragment = undefined;
 
   /**
    * Determines if a test is a test-suite or exported-test

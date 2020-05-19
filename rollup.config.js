@@ -15,6 +15,12 @@ export default [
       sourcemap: true,
     },
     plugins: [
+      // Can't figure out how to get Rollup to create the declaration files (.d.ts)
+      // with the TypeScript plugin. Trying to define the declaration configs in the
+      // tsconfig.json file creates errors for Rollup; defining the configurations in
+      // Rollup has required properties that conflict with Rollup. I'm not sure if
+      // having them created separately by TypeScript will allow our users to properly
+      // map to the minified files created by Rollup.
       typescript(),
       terser()
     ]

@@ -24,9 +24,9 @@
   ],
   "source": true,
   "scripts": {
-    "ts": "tsc --outDir ./build",
+    "ts": "tsc --outDir ./build --declaration --declarationDir ./dist/types",
     "test": "mocha",
-    "build": "rollup -c",
+    "build": "rollup -c && yarn ts",
     "lint": "eslint \"**/*.ts\""
   },
   "dependencies": {},

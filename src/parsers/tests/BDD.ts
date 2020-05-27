@@ -4,7 +4,7 @@
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
-
+import 'mocha';
 import { expect } from 'chai';
 import { JSDOM } from 'jsdom';
 import BDDTestParser from '../BDD';
@@ -145,6 +145,4 @@ describe('BDDTestParser', () => {
     })[0];
     new BDDTestParser([singleTest], testFrag);
   });
-
-  describe('window tested is dynamic', () => {});
 });

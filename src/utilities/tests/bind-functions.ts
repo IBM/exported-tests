@@ -4,17 +4,20 @@
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
-
+import 'mocha';
 import { expect } from 'chai';
 import bindFunctions from '../bind-functions';
 
 describe('bindFunctions applies the class instance to a function', () => {
-  class Fixture {
-    static myStaticMethod() {
-      return this.instanceProperty;
-    }
+  interface FixtureInterface {
+    instanceProperty: string;
+    myInstanceMethod: Function;
+  }
 
-    myInstanceMethod() {
+  class Fixture implements FixtureInterface {
+    instanceProperty = null;
+
+    myInstanceMethod(): string {
       return this.instanceProperty;
     }
 
@@ -22,11 +25,9 @@ describe('bindFunctions applies the class instance to a function', () => {
       this.instanceProperty = 'foo';
       bindFunctions(
         {
-          myStaticMethod: this.constructor.myStaticMethod,
           myInstanceMethod: this.myInstanceMethod,
         },
-        this,
-        ['myStaticMethod']
+        this
       );
     }
   }
@@ -35,11 +36,5 @@ describe('bindFunctions applies the class instance to a function', () => {
     const myInstance = new Fixture();
     expect(myInstance.myInstanceMethod).to.be.a('function');
     expect(myInstance.myInstanceMethod()).to.equal('foo');
-  });
-
-  it('must work for static methods', () => {
-    new Fixture();
-    expect(Fixture.myStaticMethod).to.be.a('function');
-    expect(Fixture.myStaticMethod()).to.equal('foo');
   });
 });

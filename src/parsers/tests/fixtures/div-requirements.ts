@@ -10,8 +10,9 @@
  * Note: this file simplifies the Exported Tests structure for clarity of what is actually part of tests and test suites.
  * In most real-world, use cases an ES6 JavaScript class would be used for encapsulation, inheritance, and flexibility.
  */
-import merge from 'lodash/merge';
+import { merge } from 'lodash';
 import { expect } from 'chai';
+import { TestSuite, ExportedTest } from '../../base';
 
 /**
  * Div Test element structure
@@ -21,6 +22,12 @@ import { expect } from 'chai';
  * @property {string} paragraphs - paragraph content containers
  * @property {string} input - input element
  */
+export interface Elements {
+  root?: string;
+  content?: string;
+  paragraphs?: string;
+  input?: string;
+}
 
 /**
  * Div Test configurations
@@ -29,12 +36,17 @@ import { expect } from 'chai';
  * @property {elements} classes - classes applied to selectors
  * @property {string} inputID - ID attribute of `INPUT` element
  */
+export interface Config {
+  selectors?: Elements;
+  classes?: Elements;
+  inputID?: string;
+}
 
 /**
  * Default test configuration
  * @type {config}
  */
-const defaults = {
+const defaults: Config = {
   selectors: {
     root: 'div',
     content: 'span',
@@ -47,13 +59,20 @@ const defaults = {
   inputID: 'my-input',
 };
 
+interface DivElements {
+  div: Element;
+  content: Element;
+  pSet: NodeListOf<Element>;
+  input: Element|HTMLInputElement;
+}
+
 /**
  * Grabs Div component elements from a DOM
  * @param {DocumentFragment} docFragment - JavaScript document or JSDOM fragment
  * @param {elements} selectors
  * @returns {object} elements gathered from the selectors object
  */
-const getDiv = (docFragment, selectors) => {
+const getDiv = (docFragment: DocumentFragment, selectors: Elements): DivElements => {
   const div = docFragment.querySelector(selectors.root);
   const content = div.querySelector(selectors.content);
   const pSet = div.querySelectorAll(selectors.paragraphs);
@@ -73,7 +92,7 @@ const getDiv = (docFragment, selectors) => {
  * @param {DocumentFragment} docFragment JavaScript document or JSDOM fragment
  * @param {Window} wndw=window JavaScript Window object
  */
-const beforeAll = (done, docFragment, wndw = window) => {
+const beforeAll = (done: Function, docFragment: DocumentFragment, wndw: Window = window): void => {
   const div = wndw.document.createElement('DIV');
   div.classList.add('beforeAll');
   wndw.document.body.appendChild(div);
@@ -86,7 +105,7 @@ const beforeAll = (done, docFragment, wndw = window) => {
  * @param {DocumentFragment} docFragment JavaScript document or JSDOM fragment
  * @param {Window} wndw=window JavaScript Window object
  */
-const beforeEach = (done, docFragment, wndw = window) => {
+const beforeEach = (done: Function, docFragment: DocumentFragment, wndw: Window = window): void => {
   const div = wndw.document.createElement('DIV');
   div.classList.add('beforeEach');
   wndw.document.body.appendChild(div);
@@ -99,7 +118,7 @@ const beforeEach = (done, docFragment, wndw = window) => {
  * @param {DocumentFragment} docFragment JavaScript document or JSDOM fragment
  * @param {Window} wndw=window JavaScript Window object
  */
-const afterAll = (done, docFragment, wndw = window) => {
+const afterAll = (done: Function, docFragment: DocumentFragment, wndw: Window = window): void => {
   const div = wndw.document.createElement('DIV');
   div.classList.add('afterAll');
   wndw.document.body.appendChild(div);
@@ -112,7 +131,7 @@ const afterAll = (done, docFragment, wndw = window) => {
  * @param {DocumentFragment} docFragment JavaScript document or JSDOM fragment
  * @param {Window} wndw=window JavaScript Window object
  */
-const afterEach = (done, docFragment, wndw = window) => {
+const afterEach = (done: Function, docFragment: DocumentFragment, wndw: Window = window): void => {
   const div = wndw.document.createElement('DIV');
   div.classList.add('afterEach');
   wndw.document.body.appendChild(div);
@@ -124,7 +143,7 @@ const afterEach = (done, docFragment, wndw = window) => {
  * @param {config} config see typedef
  * @return {test-set[]} test objects for use in `testRunner`
  */
-export default config => {
+const DivTests: Function = (config: Config): (TestSuite|ExportedTest)[] => {
   const settings = merge({}, defaults, config);
 
   /**
@@ -132,7 +151,7 @@ export default config => {
    * @param {DocumentFragment} docFragment JavaScript document or JSDOM fragment
    * @returns {HTMLElement[]} set of paragraphs in an array
    */
-  const getSet = docFragment => {
+  const getSet = (docFragment): Element[] => {
     const component = getDiv(docFragment, settings.selectors);
     return [...component.pSet];
   };
@@ -143,7 +162,7 @@ export default config => {
       tests: [
         {
           name: 'Standard div (from fragment)',
-          getActual: docFragment =>
+          getActual: (docFragment): object =>
             new Promise(resolve => {
               const component = getDiv(docFragment, settings.selectors);
 
@@ -153,7 +172,7 @@ export default config => {
                 classes: component.div.classList.value,
               });
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             expect(actual.html, "I find said div's content").to.not.be.empty;
             expect(actual.content, 'said content includes text').to.not.be
               .empty;
@@ -162,7 +181,7 @@ export default config => {
         },
         {
           name: 'Standard div (from window)',
-          getActual: (_, wndw = window) =>
+          getActual: (_, wndw = window): object =>
             new Promise(resolve => {
               const component = getDiv(wndw.document, settings.selectors);
 
@@ -172,7 +191,7 @@ export default config => {
                 classes: component.div.classList.value,
               });
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             expect(actual.html, "I find said div's content").to.not.be.empty;
             expect(actual.content, 'said content includes text').to.not.be
               .empty;
@@ -181,20 +200,22 @@ export default config => {
         },
         {
           name: 'Interactive elements: Un-check input',
-          getActual: (docFragment, wndw = window) =>
+          getActual: (docFragment, wndw = window): object =>
             new Promise(resolve => {
               const component = getDiv(docFragment, settings.selectors);
-              const results = {};
-              results.inputID = component.input.id;
-              results.initial = component.input.checked;
+              const results = {
+                inputID: component.input.id,
+                initial: (component.input as HTMLInputElement).checked,
+                input: wndw.document.getElementById(component.input.id),
+                after: null,
+              };
 
-              results.input = wndw.document.getElementById(component.input.id);
               results.input.click();
-              results.after = results.input.checked;
+              results.after = (results.input as HTMLInputElement).checked;
 
               resolve(results);
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             expect(actual.inputID).to.equal(settings.inputID);
             expect(actual.input, 'input should exist in the window').to.exist;
             expect(actual.initial, 'checkbox is checked by default').to.be.true;
@@ -212,14 +233,14 @@ export default config => {
           tests: [
             {
               name: 'Inherited DIV tests',
-              getActual: docFragment =>
+              getActual: (docFragment): object =>
                 new Promise(resolve => {
                   resolve({
                     tag: docFragment.querySelector(settings.selectors.root)
                       .tagName,
                   });
                 }),
-              runComparison: actual => {
+              runComparison: (actual): void => {
                 expect(actual.tag, 'div tag name').to.equal('DIV');
               },
             },
@@ -229,7 +250,7 @@ export default config => {
     },
     {
       name: 'Feature 3: Inherited tests on a child',
-      getSubFragment: docFragment => {
+      getSubFragment: (docFragment): Element => {
         const component = getDiv(docFragment, settings.selectors);
         return component.content;
       },
@@ -239,13 +260,13 @@ export default config => {
           tests: [
             {
               name: 'Inherited SPAN tests',
-              getActual: docFragment =>
+              getActual: (docFragment): object =>
                 new Promise(resolve => {
                   resolve({
                     tag: docFragment.tagName,
                   });
                 }),
-              runComparison: actual => {
+              runComparison: (actual): void => {
                 expect(actual.tag, 'span tag name').to.equal('SPAN');
               },
             },
@@ -259,28 +280,28 @@ export default config => {
       tests: [
         {
           name: 'F4: Scenario 1: should get called 3 times',
-          getActual: () =>
+          getActual: (): object =>
             new Promise(resolve => {
               resolve({
                 test: true,
               });
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             expect(actual.test, 'custom error message').to.be.true;
           },
         },
         {
           name: 'F4: Scenario 2: should only be called twice',
-          checkConditions: docFragment => {
+          checkConditions: (docFragment): boolean => {
             return !docFragment.classList.contains('fails-conditions');
           },
-          getActual: () =>
+          getActual: (): object =>
             new Promise(resolve => {
               resolve({
                 test: true,
               });
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             expect(actual.test, 'should be called 2 times').to.be.true;
           },
         },
@@ -289,31 +310,31 @@ export default config => {
     {
       name:
         '---------------------------SHOULD NOT SHOW UP--------------------------- Feature 5',
-      checkConditions: () => false,
+      checkConditions: (): boolean => false,
       tests: [
         {
           name:
             '---------------------------SHOULD NOT SHOW UP--------------------------- F5: Scenario 1',
-          getActual: () =>
+          getActual: (): object =>
             new Promise(resolve => {
               resolve({
                 test: true,
               });
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             expect(actual.test, 'custom error message').to.be.false;
           },
         },
         {
           name:
             '---------------------------SHOULD NOT SHOW UP--------------------------- F5: Scenario 2',
-          getActual: () =>
+          getActual: (): object =>
             new Promise(resolve => {
               resolve({
                 test: true,
               });
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             expect(actual.test, 'custom error message').to.be.false;
           },
         },
@@ -321,17 +342,17 @@ export default config => {
     },
     {
       name: 'Feature 6: conditional is true',
-      checkConditions: () => true,
+      checkConditions: (): boolean => true,
       tests: [
         {
           name: 'F6: Scenario1 ',
-          getActual: () =>
+          getActual: (): object =>
             new Promise(resolve => {
               resolve({
                 test: true,
               });
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             expect(
               actual.test,
               'Scenario test should run when conditional is true'
@@ -342,20 +363,20 @@ export default config => {
     },
     {
       name: 'Feature 7: Check the condition for a complete set',
-      checkConditions: (_, x, index) => {
+      checkConditions: (_, x, index): boolean => {
         return index % 3 === 0;
       },
       getFragmentSet: getSet,
       tests: [
         {
           name: 'F7: Scenario1: should be called once ',
-          getActual: () =>
+          getActual: (): object =>
             new Promise(resolve => {
               resolve({
                 test: true,
               });
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             expect(actual.test).to.be.true;
           },
         },
@@ -370,7 +391,7 @@ export default config => {
       tests: [
         {
           name: 'F8: Scenario: 1',
-          getActual: (_, wndw = window) =>
+          getActual: (_, wndw = window): object =>
             new Promise(resolve => {
               const bEDivs = wndw.document.body.getElementsByClassName(
                 'beforeEach'
@@ -391,7 +412,7 @@ export default config => {
                 aADivs,
               });
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             expect(actual.bEDivs).to.equal(1);
             expect(actual.bADivs).to.equal(1);
             expect(actual.aEDivs).to.equal(0);
@@ -400,7 +421,7 @@ export default config => {
         },
         {
           name: 'F8: Scenario: 2',
-          getActual: (_, wndw = window) =>
+          getActual: (_, wndw = window): object =>
             new Promise(resolve => {
               const bEDivs = wndw.document.body.getElementsByClassName(
                 'beforeEach'
@@ -421,7 +442,7 @@ export default config => {
                 aADivs,
               });
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             expect(actual.bEDivs).to.equal(2);
             expect(actual.bADivs).to.equal(1);
             expect(actual.aEDivs).to.equal(1);
@@ -440,7 +461,7 @@ export default config => {
       tests: [
         {
           name: 'F9: Scenario: 1',
-          getActual: (_, wndw = window, index) =>
+          getActual: (_, wndw = window, index): object =>
             new Promise(resolve => {
               const bEDivs = wndw.document.body.getElementsByClassName(
                 'beforeEach'
@@ -462,7 +483,7 @@ export default config => {
                 index,
               });
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             const numOfTests = 2;
             expect(actual.bADivs).to.equal(2);
             expect(actual.aADivs).to.equal(1);
@@ -472,7 +493,7 @@ export default config => {
         },
         {
           name: 'F9: Scenario: 2',
-          getActual: (_, wndw = window, index) =>
+          getActual: (_, wndw = window, index): object =>
             new Promise(resolve => {
               const bEDivs = wndw.document.body.getElementsByClassName(
                 'beforeEach'
@@ -494,7 +515,7 @@ export default config => {
                 index,
               });
             }),
-          runComparison: actual => {
+          runComparison: (actual): void => {
             const numOfTests = 2;
             expect(actual.bADivs).to.equal(2);
             expect(actual.aADivs).to.equal(1);
@@ -506,3 +527,5 @@ export default config => {
     },
   ];
 };
+
+export default DivTests;

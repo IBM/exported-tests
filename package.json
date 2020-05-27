@@ -16,7 +16,7 @@
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
   "browser": "dist/umd/index.js",
-  "types": "dist/es/types/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist/**/*",
     "index.js",
@@ -25,7 +25,7 @@
   ],
   "source": true,
   "scripts": {
-    "ts": "tsc --outDir ./dist/es --declaration --declarationDir ./dist/es/types",
+    "ts": "tsc --outDir ./dist/es --declaration --declarationDir ./dist/types",
     "test": "mocha",
     "build": "yarn ts && rollup -c",
     "lint": "eslint \"**/*.ts\""

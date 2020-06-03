@@ -5,7 +5,13 @@ notifications:
 
 install: yarn
 
-script:
-  - yarn lint
-  - yarn test
-  - yarn build
+jobs:
+  include:
+    - stage: test
+      script:
+        - yarn lint
+        - yarn test
+    - stage: build
+      script: yarn build
+    - stage: pre-deploy
+      script: npx semantic-release --dry-run

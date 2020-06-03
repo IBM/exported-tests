@@ -13,5 +13,10 @@ jobs:
         - yarn test
     - stage: build
       script: yarn build
-    - stage: pre-deploy
-      script: npx semantic-release --dry-run
+    - stage: release
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: npx semantic-release
+        on:
+          branch: 'stable'

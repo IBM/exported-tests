@@ -71,7 +71,6 @@
 				"name": "stable",
 				"channel": "latest"
 			}
-		],
-		"tagFormat": "v${version}"
+		]
 	}
 }

@@ -1,6 +1,6 @@
 {
   "name": "exported-tests",
-  "version": "1.0.1",
+  "version": "0.0.0",
   "bugs": "https://github.com/IBM/exported-tests/issues",
   "homepage": "https://github.com/IBM/exported-tests#project-overview",
   "author": "IBM Watson Health Pattern & Asset Library (https://github.com/orgs/IBM/teams/whpal/members)",
@@ -64,5 +64,14 @@
   "mocha": {
     "spec": "src/**/tests/*.ts",
     "require": "env/setup-test-env.js"
-  }
+  },
+  "release": {
+		"branches": [
+			{
+				"name": "stable",
+				"channel": "latest"
+			}
+		],
+		"tagFormat": "v${version}"
+	}
 }

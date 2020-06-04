@@ -5,7 +5,18 @@ notifications:
 
 install: yarn
 
-script:
-  - yarn lint
-  - yarn test
-  - yarn build
+jobs:
+  include:
+    - stage: test
+      script:
+        - yarn lint
+        - yarn test
+    - stage: build
+      script: yarn build
+    - stage: release
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: npx semantic-release
+        on:
+          branch: 'stable'

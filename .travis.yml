@@ -16,7 +16,6 @@ jobs:
     - stage: release
       deploy:
         provider: script
-        skip_cleanup: true
-        script: npx semantic-release
+        script: yarn release
         on:
           branch: 'stable'

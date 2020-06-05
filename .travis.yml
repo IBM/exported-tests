@@ -16,6 +16,6 @@ jobs:
     - stage: release
       deploy:
         provider: script
-        script: yarn release
+        script: bash scripts/deploy.sh
         on:
           branch: 'stable'

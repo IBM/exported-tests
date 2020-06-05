@@ -15,4 +15,6 @@ jobs:
       script: yarn build
     - stage: release
       if: (branch = stable) AND (type = push)
-      script: npx semantic-release
+      script:
+        - yarn build
+        - npx semantic-release

@@ -25,11 +25,10 @@
   ],
   "source": true,
   "scripts": {
-    "ts": "npx tsc --outDir ./dist/es --declaration --declarationDir ./dist/types",
+    "ts": "tsc --outDir ./dist/es --declaration --declarationDir ./dist/types",
     "test": "mocha",
-    "build": "yarn ts && npx rollup -c",
-    "lint": "eslint \"**/*.ts\"",
-    "release": "yarn build && npx semantic-release"
+    "build": "yarn ts && rollup -c",
+    "lint": "eslint \"**/*.ts\""
   },
   "dependencies": {
     "@types/jsdom": "16.2.3"

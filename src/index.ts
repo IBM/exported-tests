@@ -14,7 +14,7 @@
  * Through the TestParser, users can create a parser for a given testing framework based on their technology stack.
  */
 
-import TestParser from './parsers/base';
+import TestParser, { ExportedTest, TestSuite } from './parsers/base';
 import BDDTestParser from './parsers/BDD';
 
 /**
@@ -115,4 +115,11 @@ import BDDTestParser from './parsers/BDD';
  * @typedef {function} afterEach
  */
 
-export { TestParser, BDDTestParser };
+export {
+  // Actual parsers
+  TestParser,
+  BDDTestParser,
+  // Type interfaces
+  ExportedTest,
+  TestSuite
+};
